@@ -1,0 +1,51 @@
+﻿@model IEnumerable<MusicDbFirst.Models.Album>
+
+@{
+    ViewBag.Title = "Albums";
+}
+
+<h2>Albums</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<script>
+    function getTracks(albumId) {
+        $.ajax({            
+            url:'@Url.Action("GetTracks")',
+            data:{albumId:albumId},
+            success: function (data) {
+                $('#'+albumId).html(data);
+               
+            }
+        });
+    }
+</script>
+
+
+<div class="container">
+    @foreach (var item in Model) {
+    <div class="panel panel-default" onclick="getTracks(@item.AlbumId)">
+        <div class="panel-heading text-center">
+            <b>@Html.DisplayFor(modelItem => item.Name)</b>
+        </div>
+        <div class="col-md-4 text-center">
+            <br/>
+            <img src="@Url.Content(@item.CoverPath)"/>
+        </div>
+        <div class="panel-body">
+             <div class="col-md-4">            
+                       <br/>
+                       <b>@Html.DisplayNameFor(model => model.Artist)</b>: @Html.DisplayFor(modelItem => item.Artist)
+                       <br/>
+                       <b>@Html.DisplayNameFor(model => model.DateRelesed)</b>: @Html.DisplayFor(modelItem => item.DateRelesed)
+                       <br/>
+                       <b>@Html.DisplayNameFor(model => model.Price)</b>: @Html.DisplayFor(modelItem => item.Price)
+                       <br/>       
+                   </div> 
+            <div class="col-md-4" id="@item.AlbumId"></div>   
+        </div>
+       
+    </div>
+}
+</div>
